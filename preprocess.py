@@ -41,6 +41,9 @@ def build_vocab_idx(word_insts, min_word_count):
         Constants.EOS_WORD: Constants.EOS,
         Constants.PAD_WORD: Constants.PAD,
         Constants.UNK_WORD: Constants.UNK}
+    
+    for i in range(10):
+        word2idx['<special%i>'%i] = len(word2idx)
 
     word_count = {w: 0 for w in full_vocab}
 

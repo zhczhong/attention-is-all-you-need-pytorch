@@ -199,7 +199,7 @@ def main():
     parser.add_argument('-batch_size', type=int, default=64)
 
     #parser.add_argument('-d_word_vec', type=int, default=512)
-    parser.add_argument('-d_model', type=int, default=512)
+    parser.add_argument('-d_model', type=int, default=1024)
     parser.add_argument('-d_inner_hid', type=int, default=2048)
     parser.add_argument('-d_k', type=int, default=64)
     parser.add_argument('-d_v', type=int, default=64)
@@ -240,6 +240,7 @@ def main():
     print(opt)
 
     device = torch.device('cuda' if opt.cuda else 'cpu')
+    pretrained_encoder = torch.load("./49.pth")["encoder"] #####################
     transformer = Transformer(
         opt.src_vocab_size,
         opt.tgt_vocab_size,
@@ -254,7 +255,10 @@ def main():
         n_layers=opt.n_layers,
         n_head=opt.n_head,
         dropout=opt.dropout).to(device)
-
+    #transformer.encoder = pretrained_encoder
+    print(transformer.encoder)
+    print(pretrained_encoder)
+    #exit(0)
     optimizer = ScheduledOptim(
         optim.Adam(
             filter(lambda x: x.requires_grad, transformer.parameters()),
