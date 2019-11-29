@@ -115,7 +115,7 @@ python train.py                                      \
 --lgs 'en-fr'                                        \
 --mass_steps 'en,fr'                                 \
 --encoder_only false                                 \
---emb_dim 512                                       \
+--emb_dim 1024                                       \
 --n_layers 2                                         \
 --n_heads 8                                          \
 --dropout 0.1                                        \
@@ -124,7 +124,7 @@ python train.py                                      \
 --tokens_per_batch 3000                              \
 --optimizer adam_inverse_sqrt,beta1=0.9,beta2=0.98,lr=0.0001 \
 --epoch_size 5000                                  \
---max_epoch 500                                      \
+--max_epoch 100                                      \
 --eval_bleu true                                     \
 --word_mass 0.5                                      \
 --min_len 5                                          \
