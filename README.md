@@ -31,6 +31,16 @@ Download and unzip the dataset into MASS-unsupNMT/data/processed/en-fr.
 
 ### 1) Preprocess the data
 ```
+cd MASS-unsupNMT
+mkdir data
+cd data
+mkdir processed
+cd processed
+mkdir en-fr
+cd en-fr
+```
+Unzip dataset here and run the following command.
+```
 mv cleaned.test.diff test.en
 mv cleaned.test.msg test.fr
 mv cleaned.train.diff train.en
@@ -98,6 +108,7 @@ ln -sf $PARA_TGT_TEST_BPE.pth  $TGT_TEST_BPE.pth
 ```
 ### 2) Pre-training
 ```
+cd MASS-unsupNMT
 python train.py                                      \
 --exp_name unsupMT_enfr                              \
 --data_path ./data/processed/en-fr/                  \
