@@ -53,8 +53,9 @@ def main():
         num_workers=2,
         batch_size=opt.batch_size,
         collate_fn=collate_fn)
-
-    translator = Translator(opt)
+    
+    encoder = torch.load("./49.pth")["encoder"]
+    translator = Translator(encoder,opt)
 
     with open(opt.output, 'w') as f:
         for batch in tqdm(test_loader, mininterval=2, desc='  - (Test)', leave=False):

@@ -200,12 +200,11 @@ class Transformer(nn.Module):
     def forward(self, src_seq, src_pos, tgt_seq, tgt_pos):
 
         tgt_seq, tgt_pos = tgt_seq[:, :-1], tgt_pos[:, :-1]
-        print(tgt_seq.shape)
-        print(tgt_pos.shape)
-        enc_output, *_ = self.encoder(src_seq, src_pos)
-        print(enc_output.shape)
-        exit(0)
+        length = src_seq.eq(Constants.PAD).eq(False).sum(axis=1)
+        enc_output= self.encoder('fwd',x=src_seq.T, lengths=length,positions=src_pos.T,causal=False)
+        enc_output = enc_output.transpose(0,1)
+        #enc_output, *_ = self.encoder(src_seq, src_pos)
+        #enc_output = enc_output.detach()####freeze model
         dec_output, *_ = self.decoder(tgt_seq, tgt_pos, src_seq, enc_output)
         seq_logit = self.tgt_word_prj(dec_output) * self.x_logit_scale
-
         return seq_logit.view(-1, seq_logit.size(2))

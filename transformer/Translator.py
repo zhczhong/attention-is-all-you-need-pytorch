@@ -3,14 +3,14 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
+import transformer.Constants as Constants
 from transformer.Models import Transformer
 from transformer.Beam import Beam
 
 class Translator(object):
     ''' Load with trained model and handle the beam search '''
 
-    def __init__(self, opt):
+    def __init__(self, encoder, opt):
         self.opt = opt
         self.device = torch.device('cuda' if opt.cuda else 'cpu')
 
@@ -32,7 +32,9 @@ class Translator(object):
             n_layers=model_opt.n_layers,
             n_head=model_opt.n_head,
             dropout=model_opt.dropout)
-
+        
+        model.encoder = encoder
+        
         model.load_state_dict(checkpoint['model'])
         print('[Info] Trained model state loaded.')
 
@@ -134,7 +136,9 @@ class Translator(object):
         with torch.no_grad():
             #-- Encode
             src_seq, src_pos = src_seq.to(self.device), src_pos.to(self.device)
-            src_enc, *_ = self.model.encoder(src_seq, src_pos)
+            length = src_seq.eq(Constants.PAD).eq(False).sum(axis=1)
+            src_enc= self.model.encoder('fwd',x=src_seq.T, lengths=length,positions=src_pos.T,causal=False)
+            src_enc = src_enc.transpose(0,1)
 
             #-- Repeat data for beam search
             n_bm = self.opt.beam_size

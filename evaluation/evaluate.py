@@ -13,17 +13,18 @@ def evaluate(hyp, ref):
         references = r.readlines()
         gts = {k: [v.strip().lower()] for k, v in enumerate(references)}
     score_Bleu , stderr = Bleu().compute_score(hyp, ref)
+    print(Bleu().compute_score(hyp, ref))
     print("Bleu_4: " + str(score_Bleu))
 
-    score_Meteor, scores_Meteor = Meteor().compute_score(gts, res)
-    print("Meteor: "), score_Meteor
+    #score_Meteor, scores_Meteor = Meteor().compute_score(gts, res)
+    #print("Meteor: ", str(score_Meteor))
 
     files_rouge = FilesRouge(hyp, ref)
     scores = files_rouge.get_scores(avg=True)
     print('Rouge: ' + str(scores))
     
     score_Cider, scores_Cider = Cider().compute_score(gts, res)
-    print("Cider: "), score_Cider
+    print("Cider: "+str(score_Cider))
 
 
 if __name__ == '__main__':

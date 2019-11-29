@@ -54,7 +54,8 @@ class Meteor:
         hypothesis_str = hypothesis_str.replace('|||','').replace('  ',' ')
         score_line = ' ||| '.join(('SCORE', ' ||| '.join(reference_list), hypothesis_str))
         # pdb.set_trace()
-        self.meteor_p.stdin.write('{}\n'.format(score_line))
+        s_in = '{}\n'.format(score_line)
+        self.meteor_p.stdin.write(str.encode(s_in))
         return self.meteor_p.stdout.readline().strip()
 
     def _score(self, hypothesis_str, reference_list):
